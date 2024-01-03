@@ -6,7 +6,16 @@ import cv2
 import torch
 from torch.utils.data import Dataset
 
-def generate_csv(root_folder, label_map):
+def generate_csv(root_folder: str, label_map: dict) -> pd.DataFrame:
+    """A function that generates a dataframe with two features: image_id that corresponds to the corresponding path and the label that corresponds to the integer label.
+
+    Args:
+        root_folder (str): The folder of the images.
+        label_map (dict): A dictionary that maps string labels to the corresponding integer ones.
+
+    Returns:
+        _type_: _description_
+    """
     image_paths = []
     labels = []
 
@@ -28,7 +37,12 @@ def generate_csv(root_folder, label_map):
     df = pd.DataFrame(data)
     return df
 
-def unzip(zip_file_path):
+def unzip(zip_file_path) -> None:
+    """A function that unzips that .zip dataset file to create two seperate folders: train and test.
+
+    Args:
+        zip_file_path (_type_): _description_
+    """
     extract_to = os.path.dirname(zip_file_path)
 
     files_exist = all(os.path.exists(os.path.join(extract_to, file)) for file in zipfile.ZipFile(zip_file_path, 'r').namelist())
@@ -42,6 +56,8 @@ def unzip(zip_file_path):
         
         
 class Dataset(Dataset):
+    """Custom pytorch dataloader 
+    """
     def __init__(self, df, transform=None):
         self.df = df
         self.file_names = df['image_id'].values
